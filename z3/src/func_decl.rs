@@ -81,6 +81,13 @@ impl<'ctx> FuncDecl<'ctx> {
         unsafe { Z3_get_decl_kind(self.ctx.z3_ctx, self.z3_func_decl) }
     }
 
+    pub fn range(&self) -> Sort {
+        unsafe {
+            let sort = Z3_get_range(self.ctx.z3_ctx, self.z3_func_decl);
+            Sort::wrap(self.ctx, sort)
+        }
+    }
+
     /// Return the name of this `FuncDecl`.
     ///
     /// Strings will return the `Symbol`.  Ints will have a `"k!"` prepended to

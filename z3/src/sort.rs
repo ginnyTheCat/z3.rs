@@ -266,6 +266,18 @@ impl<'ctx> Sort<'ctx> {
             None
         }
     }
+
+    pub fn is_bv(&self) -> bool {
+        self.kind() == SortKind::BV
+    }
+
+    pub fn bv_sort_size(&self) -> Option<usize> {
+        if self.is_bv() {
+            Some(unsafe { Z3_get_bv_sort_size(self.ctx.z3_ctx, self.z3_sort) } as usize)
+        } else {
+            None
+        }
+    }
 }
 
 impl<'ctx> Clone for Sort<'ctx> {
