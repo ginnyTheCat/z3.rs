@@ -1545,13 +1545,19 @@ fn test_regex_capital_foobar_intersect_az_plus_is_unsat() {
     let solver = Solver::new(&ctx);
     let s = ast::String::new_const(ctx, "s");
 
-    let re = ast::Regexp::intersect(ctx, &[
-        &ast::Regexp::concat(ctx, &[
-            &ast::Regexp::literal(ctx, "FOO"),
-            &ast::Regexp::literal(ctx, "bar")
-        ]),
-        &ast::Regexp::plus(&ast::Regexp::range(ctx, &'a', &'z'))
-    ]);
+    let re = ast::Regexp::intersect(
+        ctx,
+        &[
+            &ast::Regexp::concat(
+                ctx,
+                &[
+                    &ast::Regexp::literal(ctx, "FOO"),
+                    &ast::Regexp::literal(ctx, "bar"),
+                ],
+            ),
+            &ast::Regexp::plus(&ast::Regexp::range(ctx, &'a', &'z')),
+        ],
+    );
     solver.assert(&s.regex_matches(&re));
     assert!(solver.check() == SatResult::Unsat);
 }

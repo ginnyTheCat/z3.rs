@@ -88,6 +88,11 @@ impl<'ctx> FuncDecl<'ctx> {
         }
     }
 
+    pub fn id(&self) -> usize {
+        let id = unsafe { Z3_get_func_decl_id(self.ctx.z3_ctx, self.z3_func_decl) };
+        id as usize
+    }
+
     /// Return the name of this `FuncDecl`.
     ///
     /// Strings will return the `Symbol`.  Ints will have a `"k!"` prepended to
@@ -133,5 +138,11 @@ impl<'ctx> Drop for FuncDecl<'ctx> {
                 Z3_func_decl_to_ast(self.ctx.z3_ctx, self.z3_func_decl),
             );
         }
+    }
+}
+
+impl<'ctx> PartialEq for FuncDecl<'ctx> {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe { Z3_is_eq_func_decl(self.ctx.z3_ctx, self.z3_func_decl, other.z3_func_decl) }
     }
 }
