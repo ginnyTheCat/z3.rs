@@ -577,6 +577,15 @@ impl<'ctx> Int<'ctx> {
         };
         Some(unsafe { Int::wrap(ctx, ast) })
     }
+
+    pub fn as_string(&self) -> Option<std::string::String> {
+        let p = unsafe { Z3_get_numeral_string(self.ctx.z3_ctx, self.z3_ast) };
+        if p.is_null() {
+            None
+        } else {
+            Some(unsafe { CStr::from_ptr(p) }.to_string_lossy().into_owned())
+        }
+    }
 }
 
 impl<'ctx> Real<'ctx> {
