@@ -3182,6 +3182,18 @@ extern "C" {
     /// - `re` is a regular expression sort.
     pub fn Z3_mk_re_full(c: Z3_context, re: Z3_sort) -> Z3_ast;
 
+    pub fn Z3_mk_char(c: Z3_context, ch: ::std::os::raw::c_uint) -> Z3_ast;
+
+    pub fn Z3_mk_char_le(c: Z3_context, ch1: Z3_ast, ch2: Z3_ast) -> Z3_ast;
+
+    pub fn Z3_mk_char_to_int(c: Z3_context, ch: Z3_ast) -> Z3_ast;
+
+    pub fn Z3_mk_char_to_bv(c: Z3_context, ch: Z3_ast) -> Z3_ast;
+
+    pub fn Z3_mk_char_from_bv(c: Z3_context, bv: Z3_ast) -> Z3_ast;
+
+    pub fn Z3_mk_char_is_digit(c: Z3_context, ch: Z3_ast) -> Z3_ast;
+
     /// Create a pattern for quantifier instantiation.
     ///
     /// Z3 uses pattern matching to instantiate quantifiers. If a

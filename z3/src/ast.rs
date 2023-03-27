@@ -70,6 +70,12 @@ pub struct Set<'ctx> {
     pub(crate) z3_ast: Z3_ast,
 }
 
+/// [`Ast`] node representing a char value.
+pub struct Char<'ctx> {
+    pub(crate) ctx: &'ctx Context,
+    pub(crate) z3_ast: Z3_ast,
+}
+
 /// [`Ast`] node representing a datatype or enumeration value.
 pub struct Datatype<'ctx> {
     pub(crate) ctx: &'ctx Context,
@@ -556,6 +562,7 @@ impl_ast!(Array);
 impl_from_try_into_dynamic!(Array, as_array);
 impl_ast!(Set);
 impl_from_try_into_dynamic!(Set, as_set);
+impl_ast!(Char);
 impl_ast!(Regexp);
 
 impl<'ctx> Int<'ctx> {
@@ -861,6 +868,10 @@ impl<'ctx> Int<'ctx> {
                 Z3_mk_bv2int(ast.ctx.z3_ctx, ast.z3_ast, signed)
             })
         }
+    }
+
+    pub fn from_char(ast: &Char<'ctx>) -> Int<'ctx> {
+        unsafe { Self::wrap(ast.ctx, Z3_mk_char_to_int(ast.ctx.z3_ctx, ast.z3_ast)) }
     }
 
     /// Create a bitvector from an integer.
@@ -1300,6 +1311,14 @@ impl<'ctx> BV<'ctx> {
         Int::from_bv(self, signed)
     }
 
+    pub fn from_char(ast: &Char<'ctx>) -> BV<'ctx> {
+        unsafe { Self::wrap(ast.ctx, Z3_mk_char_to_bv(ast.ctx.z3_ctx, ast.z3_ast)) }
+    }
+
+    pub fn to_char(&self) -> Char<'ctx> {
+        Char::from_bv(self)
+    }
+
     /// Get the size of the bitvector (in bits)
     pub fn get_size(&self) -> u32 {
         let sort = self.get_sort();
@@ -1636,6 +1655,28 @@ impl<'ctx> Set<'ctx> {
         set_subset(Z3_mk_set_subset, Bool<'ctx>);
         /// Take the set difference between two sets.
         difference(Z3_mk_set_difference, Self);
+    }
+}
+
+impl<'ctx> Char<'ctx> {
+    pub fn from_char(ctx: &'ctx Context, c: char) -> Char<'ctx> {
+        unsafe { Self::wrap(ctx, Z3_mk_char(ctx.z3_ctx, c as u32)) }
+    }
+
+    pub fn to_int(&self) -> Int<'ctx> {
+        Int::from_char(self)
+    }
+
+    pub fn from_bv(ast: &BV<'ctx>) -> Char<'ctx> {
+        unsafe { Self::wrap(ast.ctx, Z3_mk_char_from_bv(ast.ctx.z3_ctx, ast.z3_ast)) }
+    }
+
+    pub fn to_bv(&self) -> BV<'ctx> {
+        BV::from_char(self)
+    }
+
+    pub fn is_digit(&self) -> Bool<'ctx> {
+        unsafe { Bool::wrap(self.ctx, Z3_mk_char_is_digit(self.ctx.z3_ctx, self.z3_ast)) }
     }
 }
 
