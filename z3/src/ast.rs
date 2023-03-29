@@ -563,7 +563,9 @@ impl_from_try_into_dynamic!(Array, as_array);
 impl_ast!(Set);
 impl_from_try_into_dynamic!(Set, as_set);
 impl_ast!(Char);
+impl_from_try_into_dynamic!(Char, as_char);
 impl_ast!(Regexp);
+impl_from_try_into_dynamic!(Regexp, as_regexp);
 
 impl<'ctx> Int<'ctx> {
     #[cfg(feature = "arbitrary-size-numeral")]
@@ -1769,10 +1771,26 @@ impl<'ctx> Dynamic<'ctx> {
         }
     }
 
+    /// Returns `None` if the `Dynamic` is not actually an `Array`
+    pub fn as_char(&self) -> Option<Char<'ctx>> {
+        match self.sort_kind() {
+            SortKind::Char => Some(unsafe { Char::wrap(self.ctx, self.z3_ast) }),
+            _ => None,
+        }
+    }
+
     /// Returns `None` if the `Dynamic` is not actually a `Datatype`
     pub fn as_datatype(&self) -> Option<Datatype<'ctx>> {
         match self.sort_kind() {
             SortKind::Datatype => Some(unsafe { Datatype::wrap(self.ctx, self.z3_ast) }),
+            _ => None,
+        }
+    }
+
+    /// Returns `None` if the `Dynamic` is not actually an `Regexp`
+    pub fn as_regexp(&self) -> Option<Regexp<'ctx>> {
+        match self.sort_kind() {
+            SortKind::RE => Some(unsafe { Regexp::wrap(self.ctx, self.z3_ast) }),
             _ => None,
         }
     }

@@ -403,6 +403,8 @@ pub enum SortKind {
     Seq = generated::Z3_sort_kind::Z3_SEQ_SORT as u32,
     /// This corresponds to `Z3_RE_SORT` in the C API.
     RE = generated::Z3_sort_kind::Z3_RE_SORT as u32,
+    /// This corresponds to `Z3_CHAR_SORT` in the C API.
+    Char = generated::Z3_sort_kind::Z3_CHAR_SORT as u32,
     /// This corresponds to `Z3_UNKNOWN_SORT` in the C API.
     Unknown = generated::Z3_sort_kind::Z3_UNKNOWN_SORT as u32,
 }
