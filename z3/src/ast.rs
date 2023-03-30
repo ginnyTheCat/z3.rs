@@ -2,6 +2,7 @@
 
 use std::cmp::{Eq, PartialEq};
 use std::convert::{TryFrom, TryInto};
+use std::error::Error;
 use std::ffi::{CStr, CString};
 use std::fmt;
 use std::hash::{Hash, Hasher};
@@ -2049,3 +2050,5 @@ impl fmt::Display for IsNotApp {
         )
     }
 }
+
+impl Error for IsNotApp {}

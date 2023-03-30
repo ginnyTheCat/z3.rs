@@ -1,4 +1,5 @@
 use std::convert::TryInto;
+use std::error::Error;
 use std::ffi::CStr;
 use std::fmt;
 use z3_sys::*;
@@ -347,3 +348,5 @@ impl<'ctx> fmt::Display for SortDiffers<'ctx> {
         )
     }
 }
+
+impl Error for SortDiffers<'_> {}
