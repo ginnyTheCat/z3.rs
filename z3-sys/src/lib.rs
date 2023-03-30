@@ -6110,6 +6110,10 @@ extern "C" {
         a: *mut Z3_ast,
     ) -> ::std::os::raw::c_int;
 
+    pub fn Z3_algebraic_get_poly(c: Z3_context, a: Z3_ast) -> Z3_ast_vector;
+
+    pub fn Z3_algebraic_get_i(c: Z3_context, a: Z3_ast) -> ::std::os::raw::c_uint;
+
     /// Return the nonzero subresultants of `p` and `q` with respect to the "variable" `x`.
     ///
     /// # Preconditions:
