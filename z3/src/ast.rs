@@ -627,6 +627,22 @@ impl<'ctx> Real<'ctx> {
     pub fn get_denominator(&self) -> Int {
         unsafe { Int::wrap(self.ctx, Z3_get_denominator(self.ctx.z3_ctx, self.z3_ast)) }
     }
+
+    pub fn get_poly(&self) -> Vec<Int<'ctx>> {
+        let z3_poly = unsafe { Z3_algebraic_get_poly(self.ctx.z3_ctx, self.z3_ast) };
+
+        let len = unsafe { Z3_ast_vector_size(self.ctx.z3_ctx, z3_poly) };
+
+        let mut poly = Vec::with_capacity(len as usize);
+
+        for i in 0..len {
+            let elem = unsafe { Z3_ast_vector_get(self.ctx.z3_ctx, z3_poly, i) };
+            let elem = unsafe { Int::wrap(self.ctx, elem) };
+            poly.push(elem);
+        }
+
+        poly
+    }
 }
 
 impl<'ctx> Float<'ctx> {
